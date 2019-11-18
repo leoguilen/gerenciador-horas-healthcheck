@@ -1,0 +1,15 @@
+version: '3'
+
+services: 
+  healthcheck: 
+    image: lguilen/gerenciador-horas-healthcheck
+    build: 
+      context: .
+    ports: 
+      - "5000:5000"
+    networks: 
+      - healthcheck
+
+networks: 
+  healthcheck:
+    driver: bridge

@@ -37,19 +37,10 @@ namespace health_service
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // var dadosDependencias = new List<Dependency>();
-
-            // new ConfigureFromConfigurationOptions<List<Dependency>>(
-            //     Configuration.GetSection("Dependencies"))
-            //     .Configure(dadosDependencias);
-            // dadosDependencias = dadosDependencias.OrderBy(d => d.Name).ToList();
-
-            // services.AddHealthChecks()
-            //     .AddDependencies(dadosDependencias);
-            // services.AddHealthChecksUI();
-
             services.AddHealthChecks()
-                .AddUrlGroup(new Uri("http://httpbin.org/status/200"),"url-ok");
+                .AddUrlGroup(
+                    new Uri("http://192.168.0.13:15520/api/checkService")
+                    ,"gerenciador-horas-service");
             services.AddHealthChecksUI();
         }
 
@@ -84,16 +75,14 @@ namespace health_service
                 });
 
             // Gera o endpoint para acessar o dashboard do health check
-            app.UseHealthChecks("/health-status", new HealthCheckOptions()
+            app.UseHealthChecks("/healthchecks-data-ui", new HealthCheckOptions()
             {
                 Predicate = _ => true,
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
             });
 
             // Ativa o dashboard para a visualização da situação de cada Health Check
-            app.UseHealthChecksUI(setup => {
-                setup.ApiPath = "/health-status";
-            });
+            app.UseHealthChecksUI();
         }
     }
 }
